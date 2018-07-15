@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"  
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.xu.mapping.UserMapper">
+	<!-- resultMap映射 -->
+	<resultMap type="com.xu.entity.User" id="userRM">
+		<!-- 主键 -->
+		<id property="userId" column="userid" jdbcType="VARCHAR" />
+		<!-- 其他属性 -->
+		<result property="username" column="username" />
+		<result property="password" column="password" />
+		<result property="name" column="name" />
+		<result property="telephone" column="telephone" />
+	</resultMap>
+	
+	<!-- 查询一条数据 -->
+	<select id="get" parameterType="String" resultMap="userRM">
+		SELECT *
+		FROM user
+		WHERE userid=#{userid}
+	</select>
+	
+	<!-- 根据条件查询集合 -->
+	<select id="find" parameterType="Map" resultMap="userRM" >
+		SELECT *
+		FROM user
+		WHERE 1=1
+		<if test="username != null">and username = #{username}</if>
+		<if test="password != null">and password = #{password}</if>
+		<if test="name != null">and name like #{name}</if>
+		<if test="telephone != null">and telephone = #{telephone}</if>
+	</select>
+	
+	<insert id="insert" parameterType="com.xu.entity.User">
+		INSERT INTO user(userid, username, password, name, telphone)
+		VALUES(#{userId}, #{username}, #{password}, #{name}, #{telphone})
+	</insert>
+	
+	<update id="update" parameterType="com.xu.entity.User">
+		UPDATE user
+		<set>
+			<if test="password != null">password = #{password}</if>
+			<if test="name != null">name = #{name}</if>
+			<if test="telephone != null"> telephone = #{telephone}</if>
+		</set>
+		WHERE userid = #{userid}
+	</update>
+	
+	<!-- 删除一条  -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM user
+		WHERE userid = #{userid}
+	</delete>
+	
+	<!-- 删除多条(一维字符串数组形式) -->
+	<delete id="delete" parameterType="String" >
+		DELETE FROM user
+		WHERE userid IN 
+		<foreach collection="array" item="userid" open="(" close=")" separator=",">
+			#{userId}
+		</foreach>
+	</delete>
+
+</mapper>
