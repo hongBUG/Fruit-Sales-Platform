@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"  
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.xu.mapping.RetailerMapper">
+	<!-- resultMap映射 -->
+	<resultMap type="com.xu.entity.Retailer" id="retailerRM">
+		<!-- 主键 -->
+		<id property="retailerId" column="retailerid" jdbcType="VARCHAR" />
+		<!-- 其他属性 -->
+		<result property="name" column="name" />
+		<result property="address" column="address" />
+		<result property="status" column="status" />
+		<result property="telephone" column="telephone" />
+		<result property="createTime" column="createtime" />
+	</resultMap>
+	
+	<!-- 查询一条数据 -->
+	<select id="get" parameterType="String" resultMap="retailerRM">
+		SELECT * 
+		FROM retailer
+		WHERE retailerid = #{retailerid};
+	</select>
+	
+	<!-- SQL片段 -->
+	<sql id="query_retailer_where">
+		<if test="name != null"> and name like #{name}</if>
+		<if test="address != null"> and address like #{address}</if>
+		<if test="status != null"> and status like #{status}</if>
+		<if test="telephone != null"> and telephone = #{telephone}</if>
+		<if test="createTime != null"> and createtime = to_date(#{createtime}, 'yyyy-MM-dd HH:mm:ss')</if>
+		<if test="startTime != null">  <![CDATA[ and createtime >= to_date(#{startTime},'yyyy-MM-dd HH:mm:ss')]]></if>
+		<if test="endTime != null"> <![CDATA[ and createtime <= to_date(#{endTime}, 'yyyy-MM-dd HH:mm:ss')]]></if>
+	</sql>
+	
+	<!-- 查询 多条-->
+	<select id="find" parameterType="Map" resultMap="retailerRM">
+		SELECT *
+		FROM retailer
+		WHERE 1=1 
+		<include refid="query_retailer_where"></include> 
+		<if test="startPage != null and pageSize != null">LIMIT #{startPage}, #{pageSize} </if>
+	</select>
+	
+	<!-- 统计数量 -->
+	<select id="count" parameterType="Map" resultMap="Integer">
+		SELECT COUNT(*)
+		FROM retailer
+		WHERE 1=1
+		<include refid="query_retailer_where"></include>
+	</select>
+	
+	<insert id="insert" parameterType="com.xu.entity.User">
+		INSERT INTO 
+			retailer(retailerid, name, telephone, address, status, createtime)
+		VALUES(
+			#{retailerId}, 
+			#{name}, 
+			#{telephone}, 
+			#{address}, 
+			#{status}, 
+			#{createTime}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.xu.entity.Retailer">
+		UPDATE retailer
+		<set>
+			<if test="name != null"> name = #{name},</if>
+			<if test="address != null"> address = #{address},</if>
+			<if test="telephone != null"> telephone = #{telephone},</if>
+			<if test="status != null"> status = #{status}</if>
+		</set>
+		WHERE retailerid = #{retailerId}
+	</update>
+	
+	<!-- 删除一条  -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM retailer
+		WHERE retailerid = #{retailerid}
+	</delete>
+	
+	<!-- 删除多条(一维字符串数组形式) -->
+	<delete id="delete" parameterType="String" >
+		DELETE FROM retailer
+		WHERE retailerid IN 
+		<foreach collection="array" item="retailerId" open="(" close=")" separator=",">
+			#{retailerId}
+		</foreach>
+	</delete>
+</mapper>

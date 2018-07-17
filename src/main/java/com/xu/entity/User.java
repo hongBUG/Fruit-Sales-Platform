@@ -6,7 +6,7 @@ public class User {
 	private String username;	// English name
 	private String password;
 	private String name;   // Chinese name
-	private String telphone;
+	private String telephone;
 	/**
 	 * @return the userId
 	 */
@@ -58,13 +58,13 @@ public class User {
 	/**
 	 * @return the telphone
 	 */
-	public String getTelphone() {
-		return telphone;
+	public String getTelephone() {
+		return telephone;
 	}
 	/**
 	 * @param telphone the telphone to set
 	 */
 	public void setTelphone(String telphone) {
-		this.telphone = telphone;
+		this.telephone = telphone;
 	}
 }

@@ -26,15 +26,15 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		SELECT *
 		FROM user
 		WHERE 1=1
-		<if test="username != null">and username = #{username}</if>
-		<if test="password != null">and password = #{password}</if>
-		<if test="name != null">and name like #{name}</if>
-		<if test="telephone != null">and telephone = #{telephone}</if>
+		<if test="username != null"> and username = #{username},</if>
+		<if test="password != null"> and password = #{password},</if>
+		<if test="name != null"> and name like #{name},</if>
+		<if test="telephone != null"> and telephone = #{telephone}</if>
 	</select>
 	
 	<insert id="insert" parameterType="com.xu.entity.User">
-		INSERT INTO user(userid, username, password, name, telphone)
-		VALUES(#{userId}, #{username}, #{password}, #{name}, #{telphone})
+		INSERT INTO user(userid, username, password, name, telephone)
+		VALUES(#{userId}, #{username}, #{password}, #{name}, #{telephone})
 	</insert>
 	
 	<update id="update" parameterType="com.xu.entity.User">
@@ -44,7 +44,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			<if test="name != null">name = #{name}</if>
 			<if test="telephone != null"> telephone = #{telephone}</if>
 		</set>
-		WHERE userid = #{userid}
+		WHERE userid = #{userId}
 	</update>
 	
 	<!-- 删除一条  -->
@@ -57,7 +57,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<delete id="delete" parameterType="String" >
 		DELETE FROM user
 		WHERE userid IN 
-		<foreach collection="array" item="userid" open="(" close=")" separator=",">
+		<foreach collection="array" item="userId" open="(" close=")" separator=",">
 			#{userId}
 		</foreach>
 	</delete>
