@@ -28,7 +28,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<if test="address != null"> and address like #{address}</if>
 		<if test="status != null"> and status like #{status}</if>
 		<if test="telephone != null"> and telephone = #{telephone}</if>
-		<if test="createTime != null"> and createtime = to_date(#{createtime}, 'yyyy-MM-dd HH:mm:ss')</if>
+		<if test="createTime != null"> and createtime = to_date(#{createTime}, 'yyyy-MM-dd HH:mm:ss')</if>
 		<if test="startTime != null">  <![CDATA[ and createtime >= to_date(#{startTime},'yyyy-MM-dd HH:mm:ss')]]></if>
 		<if test="endTime != null"> <![CDATA[ and createtime <= to_date(#{endTime}, 'yyyy-MM-dd HH:mm:ss')]]></if>
 	</sql>
@@ -87,5 +87,5 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<foreach collection="array" item="retailerId" open="(" close=")" separator=",">
 			#{retailerId}
 		</foreach>
-	</delete>
+	</delete>	
 </mapper>

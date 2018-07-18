@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"  
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.xu.mapping.UserMapper">
+	<!-- resultMap映射 -->
+	<resultMap type="com.xu.entity.Commodities" id="commoditiesRM">
+		<!-- 主键 -->
+		<id property="fruitId" column="fruitid" jdbcType="VARCHAR" />
+		<!-- 其他属性 -->
+		<result property="name" column="name" />
+		<result property="price" column="price" />
+		<result property="locality" column="locality" />
+		<result property="createTime" column="createtime" />
+	</resultMap>
+	
+	<!-- 查询一条数据 -->
+	<select id="get" parameterType="String" resultMap="commoditiesRM">
+		SELECT *
+		FROM commodities
+		WHERE fruitid=#{fruitd}
+	</select>
+	
+	<!-- SQL片段 -->
+	<sql id="query_commodities_where">
+		<if test="name != null"> and name like #{name}</if>
+		<if test="startPrice != null"> <![CDATA[ and price >= #{startPrice}]]></if>
+		<if test="endPrice != null"> <![CDATA[ and price <= #{endPrice}]]></if>
+		<if test="locality != null"> and locality like #{locality}</if>
+		<if test="createTime != null"> and createtime = to_date(#{createTime}, 'yyyy-MM-dd HH:mm:ss')</if>
+		<if test="startTime != null">  <![CDATA[ and createtime >= to_date(#{startTime},'yyyy-MM-dd HH:mm:ss')]]></if>
+		<if test="endTime != null"> <![CDATA[ and createtime <= to_date(#{endTime}, 'yyyy-MM-dd HH:mm:ss')]]></if>
+	</sql>
+	
+	<!-- 根据条件查询集合 -->
+	<select id="find" parameterType="Map" resultMap="commoditiesRM" >
+		SELECT *
+		FROM commodities
+		WHERE 1=1
+		<include refid="query_commodities_where"></include>
+		<if test="startPage != null and pageSize != null">LIMIT #{startPage}, #{pageSize} </if>
+	</select>
+	
+	<!-- 统计数量 -->
+	<select id="count" parameterType="Map" resultMap="Integer">
+		SELECT COUNT(*)
+		FROM commodities
+		WHERE 1=1
+		<include refid="query_commodities_where"></include>
+	</select>
+	
+	<!-- 插入 -->
+	<insert id="insert" parameterType="com.xu.entity.Commodities">
+		INSERT INTO 
+			commodities(fruitid, name, price, locality, createtime)
+		VALUES(
+			#{fruitId}, 
+			#{name}, 
+			#{price}, 
+			#{locality}, 
+			#{createTime}
+		)
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update" parameterType="com.xu.entity.Commodities">
+		UPDATE commodities
+		<set>
+			<if test="name != null"> name = #{name},</if>
+			<if test="price != null"> price = #{price},</if>
+			<if test="locality != null"> locality = #{locality},</if>
+		</set>
+		WHERE fruitid = #{fruitId}
+	</update>
+	
+	<!-- 删除一条  -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM commodities
+		WHERE fruitid = #{fruitid}
+	</delete>
+	
+	<!-- 删除多条(一维字符串数组形式) -->
+	<delete id="delete" parameterType="String" >
+		DELETE FROM commodities
+		WHERE fruitid IN 
+		<foreach collection="array" item="fruitId" open="(" close=")" separator=",">
+			#{fruitId}
+		</foreach>
+	</delete>	
+
+</mapper>
