@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"  
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.xu.mapping.AccessoryMapper">
+	<!-- resultMap映射 -->
+	<resultMap type="com.xu.entity.Accessory" id="accessoryRM">
+		<!-- 主键 -->
+		<id property="accessoryId" column="accessoryid" jdbcType="VARCHAR" />
+		<!-- 其他属性 -->
+		<result property="fruitId" column="fruitid" />
+		<result property="name" column="name" />
+		<result property="price" column="price" />
+		<result property="createTime" column="createtime" />
+	</resultMap>
+	
+	<!-- 查询一条数据 -->
+	<select id="get" parameterType="String" resultMap="accessoryRM">
+		SELECT * 
+		FROM accessory
+		WHERE accessoryid = #{accessoryid};
+	</select>
+	
+	<!-- 查询 多条-->
+	<select id="find" parameterType="Map" resultMap="accessoryRM">
+		SELECT *
+		FROM accessory
+		WHERE 1=1 
+		<if test="fruitId != null ">and fruitid = #{fruitId}</if>
+	</select>
+	
+	<insert id="insert" parameterType="com.xu.entity.Accessory">
+		INSERT INTO 
+			retailer(accessoryid, fruitid, name, price, createtime)
+		VALUES(
+			#{accessoryId},
+			#{fruitId}, 
+			#{name}, 
+			#{price}, 
+			#{createTime}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.xu.entity.Accessory">
+		UPDATE retailer
+		<set>
+			<if test="name != null"> name = #{name},</if>
+			<if test="price != null"> price = #{price}</if>
+		</set>
+		WHERE accessoryid = #{accessoryId}
+	</update>
+	
+	<!-- 删除一条  -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM accessory
+		WHERE accessoryid = #{accessoryid}
+	</delete>
+	
+	<!-- 删除多条(一维字符串数组形式) -->
+	<delete id="delete" parameterType="String" >
+		DELETE FROM accessory
+		WHERE accessoryid IN 
+		<foreach collection="array" item="accessoryId" open="(" close=")" separator=",">
+			#{accessoryId}
+		</foreach>
+	</delete>	
+	
+	<!-- 删除货物下附属品 -->
+	<delete id="deleteByFruitId" parameterType="String">
+		delete from accessory
+		where fruitid = #{fruitId}
+	</delete>
+</mapper>

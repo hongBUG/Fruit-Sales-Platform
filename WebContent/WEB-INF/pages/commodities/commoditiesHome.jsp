@@ -106,6 +106,8 @@
 					<td>
 						<a onclick="editCommodities('${item.fruitId}')">编辑</a> | 
 						<a onclick="deleteCommodities('${item.fruitId}', '${item.name }')">删除</a>
+						
+						<a onclick="openwin('${item.fruitId}')">附属品</a>
 						<form action="delete.action" id="deleteForm" method="post" >
 							<input type="hidden" name="fruitId" id="dFruitId" />
 							<input type="hidden" name="startPage" id="dStartPage" />
@@ -268,6 +270,10 @@
 			 return false;
 		 }
 		 return true;
+	}
+	function openwin(fruitId) {
+		var url = "${pageContext.request.contextPath}/accessory/toList.action?fruitId=" + fruitI d;
+		window.open(url, "附属品", "height=400,width=700,scrollbars=yes");
 	}
 </script>
 </body>

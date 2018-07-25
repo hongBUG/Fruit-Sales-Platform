@@ -1,4 +1,4 @@
-package com.xu.service;
+package com.xu.service.impl;
 
 import java.io.Serializable;
 import java.util.List;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.xu.dao.CommoditiesDao;
 import com.xu.entity.Commodities;
+import com.xu.service.CommoditiesService;
 
 @Service
 public class CommoditiesServiceImpl implements CommoditiesService{

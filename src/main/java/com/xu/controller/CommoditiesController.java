@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mysql.jdbc.log.LogFactory;
 import com.xu.entity.Commodities;
+import com.xu.service.AccessoryService;
 import com.xu.service.CommoditiesService;
 
 @Controller
@@ -26,9 +29,17 @@ public class CommoditiesController extends BaseController{
 	@Autowired
 	CommoditiesService commoditiesService;
 	
+	@Autowired
+	AccessoryService accessoryService;
+	
+	// 创建日志对象  用于记录删除数量的
+	Log log = org.apache.commons.logging.LogFactory.getLog(this.getClass());
+	
 	@RequestMapping("delete.action")
 	public String delete(Model model, Commodities commodities) {
 		commoditiesService.deleteById(commodities.getFruitId());
+		int number = accessoryService.deleteByFruitId(commodities.getFruitId());
+		log.info("delete fruitId=" + commodities.getFruitId() + "'s accessorys number: " + number);
 		// 重新查询原来页面的列表
 		Commodities queryCommodities = new Commodities();
 		queryCommodities.setCurrentPage(commodities.getCurrentPage());

@@ -50,7 +50,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<include refid="query_retailer_where"></include>
 	</select>
 	
-	<insert id="insert" parameterType="com.xu.entity.User">
+	<insert id="insert" parameterType="com.xu.entity.Retailer">
 		INSERT INTO 
 			retailer(retailerid, name, telephone, address, status, createtime)
 		VALUES(
